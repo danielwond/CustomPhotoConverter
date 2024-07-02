@@ -60,6 +60,13 @@ namespace CustomPhotoConverter
 
                 if (!token.IsCancellationRequested)
                 {
+                    button1.Enabled = true;
+                    button2.Enabled = true;
+                    button3.Enabled = true;
+                    textBox1.Enabled = true;
+                    textBox2.Enabled = true;
+                    button4.Text = "Close";
+
                     MessageBox.Show("Done", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -68,28 +75,28 @@ namespace CustomPhotoConverter
 
         private void button2_Click(object sender, EventArgs e)
         {
-            textBox1.Text = "";
-            textBox1.ForeColor = Color.Black;
-            var fontSize = textBox2.Font.Size;
-            textBox1.Font = new Font("Arial", fontSize, FontStyle.Regular);
-
             FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
+                textBox1.Text = "";
+                textBox1.ForeColor = Color.Black;
+                var fontSize = textBox2.Font.Size;
+                textBox1.Font = new Font("Arial", fontSize, FontStyle.Regular);
+
                 textBox1.Text = folderBrowserDialog1.SelectedPath;
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            textBox2.Text = "";
-            textBox2.ForeColor = Color.Black;
-            var fontSize = textBox2.Font.Size;
-            textBox2.Font = new Font("Arial", fontSize, FontStyle.Regular);
-
             FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
+                textBox2.Text = "";
+                textBox2.ForeColor = Color.Black;
+                var fontSize = textBox2.Font.Size;
+                textBox2.Font = new Font("Arial", fontSize, FontStyle.Regular);
+
                 textBox2.Text = folderBrowserDialog1.SelectedPath;
             }
         }

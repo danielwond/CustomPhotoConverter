@@ -58,10 +58,16 @@ namespace CustomPhotoConverter.Helpers
                         Directory.CreateDirectory(outputFolderPath);
                     }
 
-                    var outputFilePath = Path.Combine(outputFolderPath, $"img{i}.jpg");
+                    //var outputFilePath = Path.Combine(outputFolderPath, $"img{i}.jpg");
+                    var filename = Path.GetFileName(imagePaths[i]);
+                    var outputFilePath = Path.Combine(outputFolderPath, filename);
 
-                    await Task.Run(() => CreateImage(outputFilePath, img));
-                    _progressBar.Value = i;
+                    if (!File.Exists(outputFilePath))
+                    {
+                        await Task.Run(() => CreateImage(outputFilePath, img));
+
+                    }
+                    _progressBar.Value = i + 1;
                 }
 
                 _label.Text = "Conversion has finished :)";
