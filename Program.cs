@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomPhotoConverter.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,9 @@ namespace CustomPhotoConverter
         [STAThread]
         static void Main()
         {
+            var reg = new RegistryHelper();
+            reg.InitializeRegistry();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

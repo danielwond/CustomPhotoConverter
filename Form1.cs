@@ -167,5 +167,21 @@ namespace CustomPhotoConverter
                 textBox2.Font = new Font("Arial", fontSize, FontStyle.Regular);
             }
         }
+
+        private void cropSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CropForm cropForm = new CropForm();
+            cropForm.Show();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("      Danny\n+251920343113\n\n  Version 1.0.0", "About");
+        }
     }
 }
