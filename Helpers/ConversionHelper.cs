@@ -12,25 +12,10 @@ namespace CustomPhotoConverter.Helpers
 {
     public class ConversionHelper
     {
-        //string folderPath = @"C:\Users\ddpro\Desktop\New folder (10)";
-        private readonly string _folderPath = "";
-        private readonly string _outputPath = "";
-        private readonly ProgressBar _progressBar;
-        private readonly Label _label;
-
-        public ConversionHelper(string folderPath, string outputPath, ProgressBar progressBar, Label label)
-        {
-            _folderPath = folderPath;
-            _outputPath = outputPath;
-            _progressBar = progressBar;
-            _label = label;
-            _progressBar.Minimum = 0;
-        }
-
-        public async Task ConvertPhotos(CancellationToken token)
+        public async Task ConvertPhotos(CancellationToken token, string _folderPath, string _outputPath, ProgressBar _progressBar, Label _label)
         {
             _progressBar.Refresh();
-           
+
             try
             {
                 List<string> imagePaths = GetImagesFromFolder(_folderPath);
@@ -90,7 +75,6 @@ namespace CustomPhotoConverter.Helpers
             {
 
                 int imageCount = 8;
-
                 Graphics g = Graphics.FromImage(collageBitmap);
                 g.Clear(Color.White);
 
@@ -134,6 +118,38 @@ namespace CustomPhotoConverter.Helpers
             }
         }
 
+        public Bitmap CreateImage(Image bitmap, PictureBox pictureBox, int imgOneHeight, int imgOneWidth, int imgTwoHeight, int imgTwoWidth, int imgOneQty, int imgTwoQty)
+        {
+            int space = 20;
+
+            /*            int canvasWidth = 1772;
+                        int canvasHeight = 1181;*/
+
+            Bitmap collageBitmap = new Bitmap(width: pictureBox.Width, height: pictureBox.Height);
+
+            Graphics g = Graphics.FromImage(collageBitmap);
+            g.Clear(Color.White);
+
+            var x_increment = imgOneWidth + space;
+            var y_increment = imgOneHeight + space;
+
+            var x = 0 + 10;
+            var y = 0 + 10;
+
+            var sizeOne = DrawImagesOnCanvas(collageBitmap, bitmap, x, y, imgOneWidth, imgOneHeight, x_increment, y_increment, imgOneQty, space, true);
+            Console.WriteLine(sizeOne);
+
+            x = x_increment * (imgOneQty / 2) + (space / 2);
+            y_increment = imgTwoHeight + space;
+            x_increment = imgTwoWidth + space;
+
+            var sizeTwo = DrawImagesOnCanvas(collageBitmap, bitmap, x, y, imgTwoWidth, imgTwoHeight, x_increment, y_increment, imgTwoQty, space, false);
+            Console.WriteLine(sizeTwo);
+
+            return collageBitmap;
+
+        }
+
         List<string> GetImagesFromFolder(string folderPath)
         {
             List<string> imagePaths = Directory.EnumerateFiles(folderPath, "*.jpg", SearchOption.AllDirectories).ToList();
@@ -147,9 +163,9 @@ namespace CustomPhotoConverter.Helpers
 
             return new Dictionary<string, int>()
             {
-                {"Height", img.Height }, 
-                {"Width", img.Width}, 
-                {"SmallHeight" , smallImg.Height}, 
+                {"Height", img.Height },
+                {"Width", img.Width},
+                {"SmallHeight" , smallImg.Height},
                 {"SmallWidth", smallImg.Width}
             };
         }
@@ -183,6 +199,61 @@ namespace CustomPhotoConverter.Helpers
                 g.DrawImage(image, rect);
                 g.DrawRectangle(new Pen(Brushes.Black, borderWidth), rect);
             }
+        }
+
+        void DrawImageWithBorder(Graphics g, Image image, Rectangle rect, float borderWidth = 1)
+        {
+            g.DrawImage(image, rect);
+            g.DrawRectangle(new Pen(Brushes.Black, borderWidth), rect);
+        }
+
+        Tuple<int, int> DrawImagesOnCanvas(Bitmap collageBitmap, Image bitmap, int x, int y, int imageWidth, int imageHeight, int x_increment, int y_increment, int amount, int space, bool firstSize)
+        {
+            var x_stopped_at = x;
+            var y_stopped_at = y;
+
+            Graphics graphics = Graphics.FromImage(collageBitmap);
+            var rectangle = new Rectangle(x, y, imageWidth, imageHeight);
+
+            for (int i = 1; i <= amount; i++)
+            {
+                DrawImageWithBorder(graphics, bitmap, rectangle, 5);
+
+                if (firstSize)
+                {
+                    x += x_increment;
+                    if (i % (amount / 2) == 0)
+                    {
+                        y += y_increment;
+
+                        //because it pushed the y axis twice.. when it came to the second or third row. so divide it by half
+                        x = space / 2;
+                    }
+                }
+                else
+                {
+                    x += x_increment;
+                    if (i % (amount / 2) == 0)
+                    {
+                        y += y_increment;
+                        x = x_stopped_at;
+                    }
+                }
+
+                rectangle.Location = new Point(x, y);
+            }
+
+            return new Tuple<int, int>(x, y);
+
+            //graphics.Dispose();
+        }
+
+        public Dictionary<string, int> GetRemainingSpace(PictureBox pictureBox, int x, int y)
+        {
+            var pictureBoxHeight = pictureBox.Height;
+            var pictureBoxWidth = pictureBox.Width;
+
+            return new Dictionary<string, int> { { "height", pictureBoxHeight - y }, { "width", pictureBoxWidth - x } };
         }
     }
 }

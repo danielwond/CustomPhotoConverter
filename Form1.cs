@@ -36,11 +36,11 @@ namespace CustomPhotoConverter
             if (string.IsNullOrEmpty(textBox2.Text) || !Directory.Exists(textBox2.Text))
             {
                 MessageBox.Show("Invalid Destination", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return; 
+                return;
             }
 
             var dialogResult = MessageBox.Show($"Conversion is about to start on folder {textBox1.Text.Split('\\').Last()}\nAre you sure you want to continue?", "Confirmation", MessageBoxButtons.YesNo);
-            if(dialogResult == DialogResult.Yes)
+            if (dialogResult == DialogResult.Yes)
             {
                 _cancellationTokenSource?.Dispose();
                 _cancellationTokenSource = new CancellationTokenSource();
@@ -54,9 +54,9 @@ namespace CustomPhotoConverter
                 textBox2.Enabled = false;
                 button4.Text = "Stop";
 
-                var conversion = new ConversionHelper(textBox1.Text, textBox2.Text, progressBar1, lblProgress);
+                var conversion = new ConversionHelper();
 
-                await conversion.ConvertPhotos(token);
+                await conversion.ConvertPhotos(token, textBox1.Text, textBox2.Text, progressBar1, lblProgress);
 
                 if (!token.IsCancellationRequested)
                 {
@@ -103,10 +103,10 @@ namespace CustomPhotoConverter
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if(button4.Text == "Stop")
+            if (button4.Text == "Stop")
             {
                 var dialogResult = MessageBox.Show($"Conversion has started\nAre you sure you want to Stop?", "Confirmation", MessageBoxButtons.YesNo);
-                if(dialogResult == DialogResult.Yes)
+                if (dialogResult == DialogResult.Yes)
                 {
                     _cancellationTokenSource?.Cancel();
 
@@ -129,7 +129,7 @@ namespace CustomPhotoConverter
 
         private void textBox1_Enter(object sender, EventArgs e)
         {
-            if(textBox1.Text == "Select the source..")
+            if (textBox1.Text == "Select the source..")
             {
                 textBox1.Text = "";
                 textBox1.ForeColor = Color.Black;
@@ -163,7 +163,7 @@ namespace CustomPhotoConverter
             {
                 textBox2.Text = "";
                 textBox2.ForeColor = Color.Black;
-                var fontSize = textBox2.Font.Size; 
+                var fontSize = textBox2.Font.Size;
                 textBox2.Font = new Font("Arial", fontSize, FontStyle.Regular);
             }
         }
@@ -182,6 +182,12 @@ namespace CustomPhotoConverter
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("      Danny\n+251920343113\n\n  Version 1.0.0", "About");
+        }
+
+        private void prefrencesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Preferences preferences = new Preferences();
+            preferences.Show();
         }
     }
 }
