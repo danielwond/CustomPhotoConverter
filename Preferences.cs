@@ -1,4 +1,5 @@
 ﻿using CustomPhotoConverter.Helpers;
+using CustomPhotoConverter.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,16 +10,19 @@ using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Console;
 
 namespace CustomPhotoConverter
 {
     public partial class Preferences : Form
     {
+        MeasurementHelpers measurementHelpers;
         public Preferences()
         {
             InitializeComponent();
 
-            txtResolution.Text = GetScreenResolutionPPI().ToString();
+            measurementHelpers = new MeasurementHelpers();
+            txtResolution.Text = measurementHelpers.GetScreenResolutionPPI().ToString();
 
             InitializeElements();
 
@@ -28,35 +32,22 @@ namespace CustomPhotoConverter
             txtTwoHeight.Enabled = false;
             txtTwoWidth.Enabled = false;
 
-
         }
 
         private void btnPreview_Click(object sender, EventArgs e)
         {
             // redo this logic.. get the first size and compare it with the second size.. and whichever is the biggest take the height and width of that. instead of just calculating it directly.
             var conversionHelper = new ConversionHelper();
-
-            var firstSizeIncrementX = double.Parse(txtOneWidth.Text) + 20;
-            var firstSizeIncrementY = double.Parse(txtOneHeight.Text) + 20;
-            var firstSizeAmount = int.Parse(txtSizeOneQty.Text);
-
-            var secondSizeIncrementX = double.Parse(txtTwoWidth.Text) + 20;
-            var secondSizeIncrementY = double.Parse(txtTwoHeight.Text) + 20;
-            var secondSizeAmount = int.Parse(txtSizeTwoQty.Text);
-
-
-
-
             var resourceImg = Properties.Resources.man;
 
-            var imgOneHeight = int.Parse(txtOneHeight.Text);
-            var imgOneWidth = int.Parse(txtOneWidth.Text);
-
-            var imgTwoHeight = int.Parse(txtTwoHeight.Text);
-            var imgTwoWidth = int.Parse(txtTwoWidth.Text);
+            var firstSize = new PhotoSizeModel(width: int.Parse(txtOneWidth.Text), height: int.Parse(txtOneHeight.Text), int.Parse(txtSizeOneQty.Text));
+            var secondSize = new PhotoSizeModel(width: int.Parse(txtTwoWidth.Text), height: int.Parse(txtTwoHeight.Text), amount: int.Parse(txtSizeTwoQty.Text));
 
 
-            var img = conversionHelper.CreateImage(resourceImg, pictureBox1, imgOneHeight, imgOneWidth, imgTwoHeight, imgTwoWidth, firstSizeAmount, secondSizeAmount);
+            var img = conversionHelper.CreateImage(resourceImg, pictureBox1, firstSize, secondSize);
+
+            WriteLine(conversionHelper.GetRemainingSpace(pictureBox1, firstSize, secondSize));
+
             pictureBox1.Image = img;
         }
 
@@ -93,7 +84,7 @@ namespace CustomPhotoConverter
             if (txtOneWidthcm.Text != string.Empty)
             {
                 var value = double.Parse(txtOneWidthcm.Text);
-                txtOneWidth.Text = CalculatePixel(value).ToString();
+                txtOneWidth.Text = measurementHelpers.ConvertToPixel(value).ToString();
             }
         }
 
@@ -103,7 +94,7 @@ namespace CustomPhotoConverter
             if (txtOneHeightcm.Text != string.Empty)
             {
                 var value = double.Parse(txtOneHeightcm.Text);
-                txtOneHeight.Text = CalculatePixel(value).ToString();
+                txtOneHeight.Text = measurementHelpers.ConvertToPixel(value).ToString();
             }
         }
 
@@ -112,7 +103,7 @@ namespace CustomPhotoConverter
             if (txtTwoWidthcm.Text != string.Empty)
             {
                 var value = double.Parse(txtTwoWidthcm.Text);
-                txtTwoWidth.Text = CalculatePixel(value).ToString();
+                txtTwoWidth.Text = measurementHelpers.ConvertToPixel(value).ToString();
             }
         }
 
@@ -121,7 +112,7 @@ namespace CustomPhotoConverter
             if (txtTwoHeightcm.Text != string.Empty)
             {
                 var value = double.Parse(txtTwoHeightcm.Text);
-                txtTwoHeight.Text = CalculatePixel(value).ToString();
+                txtTwoHeight.Text = measurementHelpers.ConvertToPixel(value).ToString();
             }
         }
 
@@ -142,96 +133,41 @@ namespace CustomPhotoConverter
             if (txtBoxcm.Text != string.Empty)
             {
                 var value = double.Parse(txtBoxcm.Text);
-                txtBox.Text = CalculatePixel(value).ToString();
+                txtBox.Text = measurementHelpers.ConvertToPixel(value).ToString();
             }
         }
 
         void InitializeElements()
         {
-            txtOneWidth.Text = CalculatePixel(3).ToString();
-            txtOneHeight.Text = CalculatePixel(4).ToString();
-
-            txtTwoHeight.Text = CalculatePixel(2).ToString();
-            txtTwoWidth.Text = CalculatePixel(2).ToString();
-
             txtOneWidthcm.Text = "3";
             txtOneHeightcm.Text = "4";
 
             txtTwoWidthcm.Text = "2";
             txtTwoHeightcm.Text = "2";
 
-            txtSizeOneQty.Text = "8";
+            txtSizeOneQty.Text = "6";
             txtSizeTwoQty.Text = "4";
+
+            txtOneWidth.Text = measurementHelpers.ConvertToPixel(3).ToString();
+            txtOneHeight.Text = measurementHelpers.ConvertToPixel(4).ToString();
+
+            txtTwoHeight.Text = measurementHelpers.ConvertToPixel(2).ToString();
+            txtTwoWidth.Text = measurementHelpers.ConvertToPixel(2).ToString();
+
+            pictureBox1.Height = measurementHelpers.ConvertToPixel(10);
+            pictureBox1.Width = measurementHelpers.ConvertToPixel(15);
 
             var conversionHelper = new ConversionHelper();
             var resourceImg = Properties.Resources.man;
 
-            var imgOneHeight = int.Parse(txtOneHeight.Text);
-            var imgOneWidth = int.Parse(txtOneWidth.Text);
 
-            var imgTwoHeight = int.Parse(txtTwoHeight.Text);
-            var imgTwoWidth = int.Parse(txtTwoWidth.Text);
+            var firstSize = new PhotoSizeModel(width: int.Parse(txtOneWidth.Text), height: int.Parse(txtOneHeight.Text), int.Parse(txtSizeOneQty.Text));
+            var secondSize = new PhotoSizeModel(width: int.Parse(txtTwoWidth.Text), height: int.Parse(txtTwoHeight.Text), amount: int.Parse(txtSizeTwoQty.Text));
 
-            var sizeOneQty = Convert.ToInt32(txtSizeOneQty.Text);
-            var sizeTwoQty = Convert.ToInt32(txtSizeTwoQty.Text);
 
-            var img = conversionHelper.CreateImage(resourceImg, pictureBox1, imgOneHeight, imgOneWidth, imgTwoHeight, imgTwoWidth, sizeOneQty, sizeTwoQty);
+            var img = conversionHelper.CreateImage(resourceImg, pictureBox1, firstSize, secondSize);
 
             pictureBox1.Image = img;
-        }
-
-        int CalculatePixel(double value)
-        {
-            //get the value in inches .. we multiply it with 0.3937
-            var valueInInches = value * 0.3937;
-
-            if (txtResolution.Text != string.Empty)
-            {
-                //change the inch to pixels with the resolution
-                var widthInPix = valueInInches * int.Parse(txtResolution.Text);
-
-                return int.Parse(Math.Ceiling(widthInPix).ToString());
-            }
-            return 0;
-        }
-
-        int GetScreenResolutionPPI()
-        {
-            try
-            {
-                // Get screen resolution
-                int screenWidth = Screen.PrimaryScreen.Bounds.Width;
-                int screenHeight = Screen.PrimaryScreen.Bounds.Height;
-
-
-                // Calculate diagonal pixel length
-                double diagonalPixels = Math.Sqrt(screenWidth * screenWidth + screenHeight * screenHeight);
-
-                // Get DPI
-                using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
-                {
-                    float dpiX = graphics.DpiX;
-                    float dpiY = graphics.DpiY;
-                    float avgDpi = (dpiX + dpiY) / 2;
-
-                    // Calculate diagonal inches
-                    double diagonalInches = diagonalPixels / avgDpi;
-
-                    // Calculate PPI
-                    double ppi = Math.Sqrt(screenWidth * screenWidth + screenHeight * screenHeight) / diagonalInches;
-
-                    Console.WriteLine($"Screen Resolution: {screenWidth}x{screenHeight}");
-                    Console.WriteLine($"Diagonal Inches: {diagonalInches:F2}");
-
-
-                    return int.Parse(ppi.ToString());
-                }
-            }
-            catch (Exception)
-            {
-
-                return 300;
-            }
         }
 
     }

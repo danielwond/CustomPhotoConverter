@@ -1,4 +1,5 @@
 ﻿using CustomPhotoConverter.Helpers;
+using CustomPhotoConverter.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,12 +17,34 @@ namespace CustomPhotoConverter
     public partial class Form1 : Form
     {
         CancellationTokenSource _cancellationTokenSource;
-
+        MeasurementHelpers measurementHelpers;
         public Form1()
         {
             InitializeComponent();
+
             textBox1.Text = "Select the source..";
             textBox2.Text = "Select the destination..";
+
+            /*            textBox1.Text = "C:\\Users\\ddpro\\Desktop\\New folder (10)";
+                        textBox2.Text = "C:\\Users\\ddpro\\Desktop\\New folder (12)";*/
+            measurementHelpers = new MeasurementHelpers();
+
+            #region Initialize Values
+            Settings.Default.resolutionPPI = Settings.Default.resolutionPPI == "0" ? "300" : Settings.Default.resolutionPPI;
+
+            Settings.Default.firstSizeWidth = Settings.Default.firstSizeWidth == "0" ? measurementHelpers.ConvertToPixel(3, 300).ToString() : Settings.Default.firstSizeWidth;
+            Settings.Default.firstSizeHeight = Settings.Default.firstSizeHeight == "0" ? measurementHelpers.ConvertToPixel(4, 300).ToString() : Settings.Default.firstSizeHeight;
+            Settings.Default.firstSizeRowQty = Settings.Default.firstSizeRowQty == "0" ? "2" : Settings.Default.firstSizeRowQty;
+            Settings.Default.firstSizeColumnQty = Settings.Default.firstSizeColumnQty == "0" ? "2" : Settings.Default.firstSizeColumnQty;
+
+            Settings.Default.secondSizeWidth = Settings.Default.secondSizeWidth == "0" ? measurementHelpers.ConvertToPixel(2, 300).ToString() : Settings.Default.secondSizeWidth;
+            Settings.Default.secondSizeHeight = Settings.Default.secondSizeHeight == "0" ? measurementHelpers.ConvertToPixel(2, 300).ToString() : Settings.Default.secondSizeHeight;
+            Settings.Default.secondSizeRowQty = Settings.Default.secondSizeRowQty == "0" ? "2" : Settings.Default.secondSizeRowQty;
+            Settings.Default.secondSizeColumnQty = Settings.Default.secondSizeColumnQty == "0" ? "2" : Settings.Default.secondSizeColumnQty;
+
+            #endregion
+
+
         }
 
 
@@ -186,7 +209,7 @@ namespace CustomPhotoConverter
 
         private void prefrencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Preferences preferences = new Preferences();
+            RowAndColumn preferences = new RowAndColumn();
             preferences.Show();
         }
     }

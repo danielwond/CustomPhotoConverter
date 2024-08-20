@@ -61,6 +61,7 @@
     </Compile>
     <Compile Include="Helpers\ConversionHelper.cs" />
     <Compile Include="Helpers\LicenceInfo.cs" />
+    <Compile Include="Helpers\MeasurementHelpers.cs" />
     <Compile Include="Helpers\RegistryHelper.cs" />
     <Compile Include="Loading.cs">
       <SubType>Form</SubType>
@@ -68,6 +69,7 @@
     <Compile Include="Loading.Designer.cs">
       <DependentUpon>Loading.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\PhotoSizeModel.cs" />
     <Compile Include="Preferences.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +78,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RowAndColumn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RowAndColumn.Designer.cs">
+      <DependentUpon>RowAndColumn.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="CropForm.resx">
       <DependentUpon>CropForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -92,6 +100,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RowAndColumn.resx">
+      <DependentUpon>RowAndColumn.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -115,7 +126,7 @@
     <None Include="Resources\man.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <None Include="Resources\Untitled-1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
