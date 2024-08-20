@@ -1,11 +1,11 @@
-<h2 id="skills">Custom Photo Converter 
+<h1 id="skills">Custom Photo Converter 
   <a class="anchorjs-link" 
      href="#skills" 
      aria-label="Anchor" 
      data-anchorjs-icon="" 
      style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;">
   </a>
-</h2>
+</h1>
 
 It simplifies organizing and converting photo collections effortlessly. 
 With this user-friendly tool, you can select a source folder containing your photos and choose where to save the converted images. 
