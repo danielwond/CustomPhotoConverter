@@ -19,7 +19,7 @@ namespace CustomPhotoConverter.Helpers
         {
             measurementHelpers = new MeasurementHelpers();
         }
-        public async Task ConvertPhotos(CancellationToken token, string _folderPath, string _outputPath, ProgressBar _progressBar, Label _label)
+        public async Task ConvertPhotos(CancellationToken token, string _folderPath, string _outputPath, ProgressBar _progressBar, Label _label, double borderSize)
         {
             _progressBar.Refresh();
 
@@ -72,7 +72,7 @@ namespace CustomPhotoConverter.Helpers
                             );
 
                         //await Task.Run(() => CreateImageOld(outputFilePath, img));
-                        await Task.Run(() => createImage(outputFilePath, img, sizeOne, sizeTwo));
+                        await Task.Run(() => createImage(outputFilePath, img, sizeOne, sizeTwo, borderSize));
                     }
                     _progressBar.Value = i + 1;
                 }
@@ -195,7 +195,7 @@ namespace CustomPhotoConverter.Helpers
             }
         }
 
-        void createImage(string outputFileName, string image, PhotoSizeModel sizeOne, PhotoSizeModel sizeTwo)
+        void createImage(string outputFileName, string image, PhotoSizeModel sizeOne, PhotoSizeModel sizeTwo, double borderSize)
         {
             int space = 10;
             var canvasWidth = measurementHelpers.ConvertToPixel(15, 300);
@@ -213,11 +213,11 @@ namespace CustomPhotoConverter.Helpers
                 var totalWidth = (x + sizeOne.width) * sizeOne.column;
                 var totalHeight = (y + sizeOne.height) * sizeOne.row;
 
-                DrawImagesOnCanvas(collageBitmap, Bitmap.FromFile(image), sizeOne, space, x, y);
+                DrawImagesOnCanvas(collageBitmap, Bitmap.FromFile(image), sizeOne, space, x, y, borderSize);
 
                 x = ((sizeOne.width + space) * sizeOne.column) + space;
 
-                DrawImagesOnCanvas(collageBitmap, Bitmap.FromFile(image), sizeTwo, space, x, y);
+                DrawImagesOnCanvas(collageBitmap, Bitmap.FromFile(image), sizeTwo, space, x, y, borderSize);
 
                 SaveCanvas(collageBitmap, outputFileName);
             }
@@ -254,7 +254,7 @@ namespace CustomPhotoConverter.Helpers
 
         }
 
-        public Bitmap CreateImageByColumnsAndRows(Image bitmap, PictureBox pictureBox, PhotoSizeModel sizeOne, PhotoSizeModel sizeTwo)
+        public Bitmap CreateImageByColumnsAndRows(Image bitmap, PictureBox pictureBox, PhotoSizeModel sizeOne, PhotoSizeModel sizeTwo, double borderSize)
         {
             try
             {
@@ -272,11 +272,11 @@ namespace CustomPhotoConverter.Helpers
                 var totalWidth = (x + sizeOne.width) * sizeOne.column;
                 var totalHeight = (y + sizeOne.height) * sizeOne.row;
 
-                DrawImagesOnCanvas(collageBitmap, bitmap, sizeOne, space, x, y);
+                DrawImagesOnCanvas(collageBitmap, bitmap, sizeOne, space, x, y, borderSize);
 
                 x = ((sizeOne.width + space) * sizeOne.column) + space;
 
-                DrawImagesOnCanvas(collageBitmap, bitmap, sizeTwo, space, x, y);
+                DrawImagesOnCanvas(collageBitmap, bitmap, sizeTwo, space, x, y, borderSize);
 
                 totalWidth = x + ((sizeTwo.width + space) * sizeTwo.column);
                 totalHeight = Math.Max(y + ((sizeTwo.height + space) * sizeTwo.row), totalHeight);
@@ -295,7 +295,7 @@ namespace CustomPhotoConverter.Helpers
             }
 
         }
-        void DrawImagesOnCanvas(Bitmap collageBitmap, Image bitmap, PhotoSizeModel size, int space, double x, double y)
+        void DrawImagesOnCanvas(Bitmap collageBitmap, Image bitmap, PhotoSizeModel size, int space, double x, double y, double borderSize)
         {
             Graphics graphics = Graphics.FromImage(collageBitmap);
 
@@ -304,7 +304,7 @@ namespace CustomPhotoConverter.Helpers
                 for (int i = 0; i < size.row; i++)
                 {
                     var rectangle = new Rectangle(x: (int)(x + j * (size.width + space)), y: (int)(y + (i * (size.height + space))), (int)(size.width), (int)(size.height));
-                    DrawImageWithBorder(graphics, bitmap, rectangle, 5);
+                    DrawImageWithBorder(graphics, bitmap, rectangle, float.Parse(borderSize.ToString()));
                 }
             }
         }

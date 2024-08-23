@@ -30,17 +30,18 @@ namespace CustomPhotoConverter
             measurementHelpers = new MeasurementHelpers();
 
             #region Initialize Values
-            Settings.Default.resolutionPPI = Settings.Default.resolutionPPI == "0" ? "300" : Settings.Default.resolutionPPI;
+            Properties.Settings.Default.resolutionPPI = Properties.Settings.Default.resolutionPPI == "0" ? "300" : Properties.Settings.Default.resolutionPPI;
 
-            Settings.Default.firstSizeWidth = Settings.Default.firstSizeWidth == "0" ? measurementHelpers.ConvertToPixel(3, 300).ToString() : Settings.Default.firstSizeWidth;
-            Settings.Default.firstSizeHeight = Settings.Default.firstSizeHeight == "0" ? measurementHelpers.ConvertToPixel(4, 300).ToString() : Settings.Default.firstSizeHeight;
-            Settings.Default.firstSizeRowQty = Settings.Default.firstSizeRowQty == "0" ? "2" : Settings.Default.firstSizeRowQty;
-            Settings.Default.firstSizeColumnQty = Settings.Default.firstSizeColumnQty == "0" ? "2" : Settings.Default.firstSizeColumnQty;
+            Properties.Settings.Default.firstSizeWidth = Properties.Settings.Default.firstSizeWidth == "0" ? measurementHelpers.ConvertToPixel(3, 300).ToString() : Properties.Settings.Default.firstSizeWidth;
+            Properties.Settings.Default.firstSizeHeight = Properties.Settings.Default.firstSizeHeight == "0" ? measurementHelpers.ConvertToPixel(4, 300).ToString() : Properties.Settings.Default.firstSizeHeight;
+            Properties.Settings.Default.firstSizeRowQty = Properties.Settings.Default.firstSizeRowQty == "0" ? "2" : Properties.Settings.Default.firstSizeRowQty;
+            Properties.Settings.Default.firstSizeColumnQty = Properties.Settings.Default.firstSizeColumnQty == "0" ? "2" : Properties.Settings.Default.firstSizeColumnQty;
 
-            Settings.Default.secondSizeWidth = Settings.Default.secondSizeWidth == "0" ? measurementHelpers.ConvertToPixel(2, 300).ToString() : Settings.Default.secondSizeWidth;
-            Settings.Default.secondSizeHeight = Settings.Default.secondSizeHeight == "0" ? measurementHelpers.ConvertToPixel(2, 300).ToString() : Settings.Default.secondSizeHeight;
-            Settings.Default.secondSizeRowQty = Settings.Default.secondSizeRowQty == "0" ? "2" : Settings.Default.secondSizeRowQty;
-            Settings.Default.secondSizeColumnQty = Settings.Default.secondSizeColumnQty == "0" ? "2" : Settings.Default.secondSizeColumnQty;
+            Properties.Settings.Default.secondSizeWidth = Properties.Settings.Default.secondSizeWidth == "0" ? measurementHelpers.ConvertToPixel(2, 300).ToString() : Properties.Settings.Default.secondSizeWidth;
+            Properties.Settings.Default.secondSizeHeight = Properties.Settings.Default.secondSizeHeight == "0" ? measurementHelpers.ConvertToPixel(2, 300).ToString() : Properties.Settings.Default.secondSizeHeight;
+            Properties.Settings.Default.secondSizeRowQty = Properties.Settings.Default.secondSizeRowQty == "0" ? "2" : Properties.Settings.Default.secondSizeRowQty;
+            Properties.Settings.Default.secondSizeColumnQty = Properties.Settings.Default.secondSizeColumnQty == "0" ? "2" : Properties.Settings.Default.secondSizeColumnQty;
+            Properties.Settings.Default.borderSize = Properties.Settings.Default.borderSize == 0 ? 5 : Properties.Settings.Default.borderSize;
 
             #endregion
 
@@ -79,7 +80,7 @@ namespace CustomPhotoConverter
 
                 var conversion = new ConversionHelper();
 
-                await conversion.ConvertPhotos(token, textBox1.Text, textBox2.Text, progressBar1, lblProgress);
+                await conversion.ConvertPhotos(token, textBox1.Text, textBox2.Text, progressBar1, lblProgress, Settings.Default.borderSize);
 
                 if (!token.IsCancellationRequested)
                 {
@@ -209,8 +210,8 @@ namespace CustomPhotoConverter
 
         private void prefrencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RowAndColumn preferences = new RowAndColumn();
-            preferences.Show();
+            RowsAndColumns preferences = new RowsAndColumns();
+            preferences.ShowDialog();
         }
     }
 }

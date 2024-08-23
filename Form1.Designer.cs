@@ -183,8 +183,8 @@
             // prefrencesToolStripMenuItem
             // 
             this.prefrencesToolStripMenuItem.Name = "prefrencesToolStripMenuItem";
-            this.prefrencesToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
-            this.prefrencesToolStripMenuItem.Text = "Prefrences";
+            this.prefrencesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.prefrencesToolStripMenuItem.Text = "Preferences";
             this.prefrencesToolStripMenuItem.Click += new System.EventHandler(this.prefrencesToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem

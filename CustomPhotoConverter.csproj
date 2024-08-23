@@ -78,11 +78,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RowAndColumn.cs">
+    <Compile Include="RowsAndColumns.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RowAndColumn.Designer.cs">
-      <DependentUpon>RowAndColumn.cs</DependentUpon>
+    <Compile Include="RowsAndColumns.Designer.cs">
+      <DependentUpon>RowsAndColumns.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="CropForm.resx">
       <DependentUpon>CropForm.cs</DependentUpon>
@@ -101,8 +101,8 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="RowAndColumn.resx">
-      <DependentUpon>RowAndColumn.cs</DependentUpon>
+    <EmbeddedResource Include="RowsAndColumns.resx">
+      <DependentUpon>RowsAndColumns.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
